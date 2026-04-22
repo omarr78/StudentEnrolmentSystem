@@ -11,9 +11,23 @@ public class MLFQ implements Scheduler {
         Queue<Process> old = new LinkedList<>();
         while (!young.isEmpty()) {
             Process process = handleProcess(young.poll());
-            if (process.getBurstTime() == 0) {
+            if (process.getState() == Thread.State.NEW) {
+                process.start();
+                try {
+                    Thread.sleep(QUANTUM_LIMIT);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                young.add(process);
+            } else if (process.getState() == Thread.State.TERMINATED) {
                 completedProcesses.add(process);
             } else {
+                process.interrupt();
+                try {
+                    Thread.sleep(QUANTUM_LIMIT);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 old.add(process);
             }
             if(young.isEmpty() && !old.isEmpty()) {

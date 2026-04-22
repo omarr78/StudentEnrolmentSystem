@@ -9,10 +9,25 @@ public class Priority implements Scheduler{
         PriorityQueue<Process> pq = new PriorityQueue<>(processes);
         while(!pq.isEmpty()) {
             Process process = handleProcess(pq.poll());
-            if(process.getBurstTime() == 0)
-                completedProcesses.add(process);
-            else
+            if (process.getState() == Thread.State.NEW) {
+                process.start();
+                try {
+                    Thread.sleep(QUANTUM_LIMIT);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 pq.add(process);
+            } else if (process.getState() == Thread.State.TERMINATED) {
+                completedProcesses.add(process);
+            } else {
+                process.interrupt();
+                try {
+                    Thread.sleep(QUANTUM_LIMIT);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                pq.add(process);
+            }
         }
     }
 }

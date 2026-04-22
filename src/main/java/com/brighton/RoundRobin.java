@@ -11,10 +11,25 @@ public class RoundRobin implements Scheduler {
         Queue<Process> q = new LinkedList<>(processes);
         while (!q.isEmpty()) {
             Process process = handleProcess(q.poll());
-            if(process.getBurstTime() == 0)
-                completedProcesses.add(process);
-            else
+            if (process.getState() == Thread.State.NEW) {
+                process.start();
+                try {
+                    Thread.sleep(QUANTUM_LIMIT);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 q.add(process);
+            } else if (process.getState() == Thread.State.TERMINATED) {
+                completedProcesses.add(process);
+            } else {
+                process.interrupt();
+                try {
+                    Thread.sleep(QUANTUM_LIMIT);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                q.add(process);
+            }
         }
     }
 }
