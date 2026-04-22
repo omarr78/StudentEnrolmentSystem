@@ -1,20 +1,18 @@
 package com.brighton;
 import com.brighton.Scheduler;
 import java.util.List;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.PriorityQueue;
 
-
-public class RoundRobin implements Scheduler {
+public class Priority implements Scheduler{
     @Override
     public void schedule(List<Process> processes, List<Process> completedProcesses) {
-        Queue<Process> q = new LinkedList<>(processes);
-        while (!q.isEmpty()) {
-            Process process = handleProcess(q.poll());
+        PriorityQueue<Process> pq = new PriorityQueue<>(processes);
+        while(!pq.isEmpty()) {
+            Process process = handleProcess(pq.poll());
             if(process.getBurstTime() == 0)
                 completedProcesses.add(process);
             else
-                q.add(process);
+                pq.add(process);
         }
     }
 }

@@ -20,7 +20,8 @@ public class Main {
         ));
 
         List<Process> completedProcess = new ArrayList<>();
-        RoundRobin.run(processes, completedProcess);
+        RoundRobin scheduler = new RoundRobin();
+        scheduler.schedule(processes, completedProcess);
 
         for (Process p : completedProcess) {
             System.out.println(p.toString());
