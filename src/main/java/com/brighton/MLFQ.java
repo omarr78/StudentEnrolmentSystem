@@ -4,7 +4,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.List;
 
-public class MLFQ implements Scheduler {
+public class MLFQ extends Scheduler {
+    @Override
+    void initializeQueue(List<Process> processes) {
+
+    }
+
     @Override
     public void schedule(List<Process> processes, List<Process> completedProcesses) {
         Queue<Process> young = new LinkedList<>(processes);
