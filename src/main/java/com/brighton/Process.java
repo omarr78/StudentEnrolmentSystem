@@ -3,7 +3,7 @@ package com.brighton;
 public class Process extends Thread implements Comparable<Process> {
     private String processId;
     private int burstTime;
-    private int priority;
+    private final int priority;
 
     public Process(String processId, int burstTime, int priority) {
         this.processId = processId;
@@ -27,13 +27,16 @@ public class Process extends Thread implements Comparable<Process> {
         this.burstTime = burstTime;
     }
 
-//    public int getPriority() {
-//        return priority;
-//    }
-//
-//    public void setPriority(int priority) {
-//        this.priority = priority;
-//    }
+    public void run() {
+        while (!isInterrupted()) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+    }
 
     @Override
     public int compareTo(Process o) {

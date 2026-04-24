@@ -12,7 +12,7 @@ public class Main {
         ArrayList<Process> processes = fileReader.read("input.csv");
 
         List<Process> completedProcess = new ArrayList<>();
-        Priority scheduler = new Priority();
+        MLFQ scheduler = new MLFQ();
         scheduler.schedule(processes, completedProcess);
 
         for (Process p : completedProcess) {
