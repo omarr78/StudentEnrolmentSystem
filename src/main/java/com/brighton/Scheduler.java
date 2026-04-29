@@ -12,7 +12,7 @@ abstract class Scheduler {
         return p;
     }
 
-    public String formatProcessOutput(Process p) {
+    static public String formatProcessOutput(Process p) {
         return p.getProcessId() +
                 ", COMPLETE, " +
                 p.getBurstTime() + "ms" +
