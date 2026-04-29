@@ -11,9 +11,8 @@ public class Main {
         CSVReader fileReader = new CSVReader();
         ArrayList<Process> processes = fileReader.read("input.csv");
 
-        List<Process> completedProcess = new ArrayList<>();
-        MLFQ scheduler = new MLFQ();
-        scheduler.schedule(processes, completedProcess);
+        Priority scheduler = new Priority();
+        List<Process> completedProcess = scheduler.schedule(processes);
 
         for (Process p : completedProcess) {
             System.out.println(scheduler.formatProcessOutput(p));

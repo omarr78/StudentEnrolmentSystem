@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class Priority extends Scheduler {
-    PriorityQueue<Process> processQueue = new PriorityQueue<>();
+    PriorityQueue<Process> processQueue;
 
     @Override
     boolean hasProcess() {
@@ -15,7 +15,7 @@ public class Priority extends Scheduler {
 
     @Override
     void initializeQueue(List<Process> processes) {
-        processQueue.addAll(processes);
+        processQueue = new PriorityQueue<Process>(processes);
     }
 
     @Override

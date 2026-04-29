@@ -1,45 +1,54 @@
 package com.brighton;
 
-import java.util.HashMap;
-
 public class Process extends Thread implements Comparable<Process> {
-    static final HashMap<String, Integer> processesBurstTime = new HashMap<>();
-    static final HashMap<String, Integer> processesTakenTime = new HashMap<>();
-
     private String processId;
+    private volatile int currentBurstTime;
     private int burstTime;
+    private int takenTime;
     private final int priority;
 
     public Process(String processId, int burstTime, int priority) {
         this.processId = processId;
+        this.currentBurstTime = burstTime;
         this.burstTime = burstTime;
+        this.takenTime = 0;
         this.priority = priority;
-        processesBurstTime.put(processId, burstTime);
     }
 
     public String getProcessId() {
         return processId;
     }
 
-    public void setProcessId(String processId) {
-        this.processId = processId;
+    public int getCurrentBurstTime() {
+        return currentBurstTime;
     }
 
     public int getBurstTime() {
         return burstTime;
     }
 
-    public void setBurstTime(int burstTime) {
-        this.burstTime = burstTime;
+    public int getTakenTime() {
+        return takenTime;
+    }
+
+    public void setTakenTime(int takenTime) {
+        this.takenTime = takenTime;
+    }
+
+    public void addTakenTime(int takenTime) {
+        this.takenTime += takenTime;
+    }
+
+    public void setCurrentBurstTime(int currentBurstTime) {
+        this.currentBurstTime = currentBurstTime;
     }
 
     public void run() {
-        while (!isInterrupted()) {
+        while (currentBurstTime > 0) {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return;
+
             }
         }
     }

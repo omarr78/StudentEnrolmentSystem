@@ -1,23 +1,22 @@
 package com.brighton;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 abstract class Scheduler {
-    static final int QUANTUM_LIMIT = 4000;
+    static final int QUANTUM_LIMIT = 20;
 
     Process handleProcess(Process p) {
-        int val = Math.min(p.getBurstTime(), QUANTUM_LIMIT);
-        p.setBurstTime(p.getBurstTime() - val);
+        int val = Math.min(p.getCurrentBurstTime(), QUANTUM_LIMIT);
+        p.setCurrentBurstTime(p.getCurrentBurstTime() - val);
         return p;
     }
 
     public String formatProcessOutput(Process p) {
         return p.getProcessId() +
                 ", COMPLETE, " +
-                Process.processesBurstTime.get(p.getProcessId()) + "ms" +
-                ", " + Process.processesTakenTime.get(p.getProcessId()) * QUANTUM_LIMIT + "ms";
+                p.getBurstTime() + "ms" +
+                ", " + p.getTakenTime() + "ms";
     }
 
     abstract boolean hasProcess();
@@ -28,15 +27,12 @@ abstract class Scheduler {
 
     abstract Process removeProcess();
 
-    void schedule(List<Process> processes, List<Process> completedProcesses) {
+    List<Process> schedule(List<Process> processes) {
+        List<Process> completedProcesses = new ArrayList<Process>();
         initializeQueue(processes);
         while (hasProcess()) {
             Process process = handleProcess(removeProcess());
-            Integer time = Process.processesTakenTime.get(process.getProcessId());
-            if (time == null) {
-                time = 0;
-            }
-            Process.processesTakenTime.put(process.getProcessId(), time + 1);
+            process.addTakenTime(QUANTUM_LIMIT);
             if (process.getState() == Thread.State.NEW) {
                 process.start();
             } else {
@@ -49,7 +45,7 @@ abstract class Scheduler {
                 Thread.currentThread().interrupt();
             }
 
-            if (process.getBurstTime() == 0 && process.getState() == Thread.State.TERMINATED) {
+            if (process.getState() == Thread.State.TERMINATED) {
                 process.interrupt();
                 completedProcesses.add(process);
             } else {
@@ -57,5 +53,10 @@ abstract class Scheduler {
                 addProcess(process);
             }
         }
+
+        for (int i = 1; i < completedProcesses.size(); i++) {
+            completedProcesses.get(i).addTakenTime(completedProcesses.get(i - 1).getTakenTime());
+        }
+        return completedProcesses;
     }
 }
