@@ -16,7 +16,7 @@ public class Main {
         scheduler.schedule(processes, completedProcess);
 
         for (Process p : completedProcess) {
-            System.out.println(p.toString());
+            System.out.println(scheduler.formatProcessOutput(p));
         }
     }
 }

@@ -3,24 +3,35 @@ package com.brighton;
 import com.brighton.Scheduler;
 
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.List;
 
 public class MLFQ extends Scheduler {
-    Queue<Process> oldQueue = new LinkedList<>();
+    Queue processQueue;
+    Queue oldProcessQueue;
 
     @Override
     void initializeQueue(List<Process> processes) {
-        queue = new LinkedList<>(processes);
+        processQueue = new Queue(processes);
+        oldProcessQueue = new Queue(processes.size());
+    }
+
+    @Override
+    void addProcess(Process process) {
+        oldProcessQueue.enqueue(process);
+    }
+
+    @Override
+    Process removeProcess() {
+        return processQueue.dequeue();
     }
 
     @Override
     boolean hasProcess() {
-        if (!queue.isEmpty()) {
+        if (!processQueue.isEmpty()) {
             return true;
         }
-        if (!oldQueue.isEmpty()) {
-            queue.add(oldQueue.poll());
+        if (!oldProcessQueue.isEmpty()) {
+            processQueue.enqueue(oldProcessQueue.dequeue());
             return true;
         }
         return false;

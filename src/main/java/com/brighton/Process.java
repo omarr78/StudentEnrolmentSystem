@@ -1,6 +1,11 @@
 package com.brighton;
 
+import java.util.HashMap;
+
 public class Process extends Thread implements Comparable<Process> {
+    static final HashMap<String, Integer> processesBurstTime = new HashMap<>();
+    static final HashMap<String, Integer> processesTakenTime = new HashMap<>();
+
     private String processId;
     private int burstTime;
     private final int priority;
@@ -9,6 +14,7 @@ public class Process extends Thread implements Comparable<Process> {
         this.processId = processId;
         this.burstTime = burstTime;
         this.priority = priority;
+        processesBurstTime.put(processId, burstTime);
     }
 
     public String getProcessId() {
@@ -40,15 +46,11 @@ public class Process extends Thread implements Comparable<Process> {
 
     @Override
     public int compareTo(Process o) {
-        return this.priority >= o.priority ? -1 : 1;
+        return this.priority <= o.priority ? -1 : 1;
     }
 
     @Override
     public String toString() {
-        return "Process{" +
-                "processId='" + processId + '\'' +
-                ", burstTime=" + burstTime +
-                ", priority=" + priority +
-                '}';
+        return processId;
     }
 }
