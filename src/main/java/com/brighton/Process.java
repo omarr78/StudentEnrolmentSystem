@@ -2,7 +2,7 @@ package com.brighton;
 
 public class Process extends Thread implements Comparable<Process> {
     private String processId;
-    private volatile int currentBurstTime;
+    private int currentBurstTime;
     private int burstTime;
     private int takenTime;
     private final int priority;
