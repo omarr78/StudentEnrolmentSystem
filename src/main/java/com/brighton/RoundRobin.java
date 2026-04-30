@@ -1,11 +1,6 @@
 package com.brighton;
 
-import com.brighton.Scheduler;
-
 import java.util.List;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-
 
 public class RoundRobin extends Scheduler {
     Queue processQueue;

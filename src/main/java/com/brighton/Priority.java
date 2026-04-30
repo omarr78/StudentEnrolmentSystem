@@ -1,7 +1,5 @@
 package com.brighton;
 
-import com.brighton.Scheduler;
-
 import java.util.List;
 import java.util.PriorityQueue;
 

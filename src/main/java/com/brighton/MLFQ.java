@@ -1,8 +1,5 @@
 package com.brighton;
 
-import com.brighton.Scheduler;
-
-import java.util.LinkedList;
 import java.util.List;
 
 public class MLFQ extends Scheduler {
