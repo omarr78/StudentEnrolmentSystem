@@ -17,11 +17,10 @@ public class CSVReader {
                 String[] columns = line.split(",");
 
                 if (isHeader) {
-                    isHeader = false; // skip header row
+                    isHeader = false;
                     continue;
                 }
 
-                // Access each column by index
                 String process_id = columns[0].trim();
                 int burst_time  = Integer.parseInt(columns[1].trim());
                 int priority = Integer.parseInt(columns[2].trim());
